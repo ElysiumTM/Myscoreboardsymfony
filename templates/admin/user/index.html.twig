@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block titreH1 %}
+    {{ block("title") }}
+{% endblock %}
+
+{% block body %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Pseudo</th>
+                <th>E-mail</th>
+                <th>Roles</th>
+                <th>Password</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.pseudo }}</td>
+                <td>{{ user.player ? user.player.email : "" }}</td>
+                {# EXO : Afficher les rôles en les remplaçant par administrateur pour le ROLE_ADMIN, joueur pour le ROLE_PLAYER, arbitre pour le ROLE_REFEREE, utilisateur pour le ROLE_USER #}
+                {# <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
+                <td>
+                    {% for r in user.roles %}
+                        {% if r == 'ROLE_ADMIN' %}
+                            Administrateur
+                        {% elseif r == 'ROLE_PLAYER' %}
+                            Joueur
+                        {% elseif r == 'ROLE_REFEREE' %}
+                            Arbitre
+                        {% else %}
+                            utilisateur
+                        {% endif %}
+                        {# {% if not loop.last %}
+                            ,
+                        {% endif %} #}
+                        {# La variable loop existe dans une boucle FOR et contient des informations sur les tours
+                            ex : loop.first (bool) qui vaut true si c'est le 1er tour
+                                 loop.last (bool) qui vaut true si c'est le dernier tour
+                                 loop.index (int) qui est égal au tour actuel#}
+                        {{ not loop.last ? ',' : '' }}
+                    {% endfor %}
+                </td>
+
+                <td>*******</td>
+                <td>
+                    <a href="{{ path('app_admin_user_show', {'id': user.id}) }}"><i class="fa fa-user"></i></a>
+                    <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}"><i class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun utilisateur n'est enregistré</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_user_new') }}" class="btn btn-primary">Ajouter un utilisateur</a>
+{% endblock %}
