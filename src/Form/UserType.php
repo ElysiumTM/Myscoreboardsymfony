@@ -25,14 +25,16 @@ class UserType extends AbstractType
                         "min" => 4,
                         "minMessage" => "Le pseudo doit comporter au moins 4 caractères"
                     ])
-                ]
+                ],
+                'data' => $user->getPlayer() ? $user->getPlayer()->getEmail() : ""
             ])
             ->add('email', EmailType::class, [
                 'mapped' => false,
                 'label'  => 'E-mail',
                 'constraints' => [
                     new NotNull(['message' => "L'e-mail ne peut pas être vide"])
-                ]
+                ],
+                "data" => $user->getPlayer() ? $user->getPlayer()->getEmail() : ""
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [

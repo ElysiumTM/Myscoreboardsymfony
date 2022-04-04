@@ -6,6 +6,7 @@ use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 class Game
@@ -19,13 +20,26 @@ class Game
     private $title;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\LessThanOrEqual(
+        propertyPath: "max_players",
+        message: "Le nombre de joueurs min doit être inférieur au nombre de joueurs max"
+    )]
+    #[Assert\LessThanOrEqual(propertyPath:"max-players", message: "Le nombre de joueurs min ...")]
     private $min_players;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\GreaterThanOrEqual(
+        propertyPath: "min_players",
+        message: "Le nombre de joueurs min doit être supérieur au nombre de joueurs min"
+    )]
+    #[Assert\GreaterThanOrEqual(propertyPath:"min_players", message: "Le nombre de joueurs min ...")]
     private $max_players;
 
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Contest::class, orphanRemoval: true)]
     private $contests;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $image;
 
     public function __construct()
     {
@@ -99,6 +113,18 @@ class Game
                 $contest->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

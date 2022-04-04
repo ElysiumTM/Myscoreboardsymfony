@@ -20,11 +20,12 @@
                 <tr>
                     <td>{{ game.id }}</td>
                     <td>{{ game.title }}</td>
+                    <td><img src="{{ asset('images/' ~ game.image) }}" alt="" height="100px"></td>
                     <td>{{ game.minPlayers }}</td>
                     <td>{{ game.maxPlayers }}</td>
                     <td>
-                        <a href="{{ path('app_admin_game_edit', {'id' : game.id}) }}"> <i class="fa fa-edit"></i> </a>
-                        <a href="{{ path('app_admin_game_modifier', {'title' : game.title}) }}"> <i class="fa fa-pencil"></i> </a>
+                        <a href="{{ path('app_admin_game_edit', {id: game.id}) }}"><i class="fa fa-edit"></i></a>
+                         <a href="{{ path('app_admin_game_modifier', {title: game.title}) }}"><i class="fa fa-pencil"></i></a>
                         <a href="{{ path('app_admin_game_delete', {'id' : game.id}) }}"> <i class="fa fa-trash"></i> </a>
                     </td>
                 </tr>
